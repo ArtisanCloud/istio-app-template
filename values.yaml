@@ -5,18 +5,20 @@
 replicaCount: 1
 
 app:
-  # - image:
-  #     repository: nginx
-  #     # Overrides the image tag whose default is the chart appVersion.
-  #     version: 1.16.0
-  #     name: old # 用来区分新旧版本的名字
-  #     weight: 0 # 流量分布。 全部版本加起来需要刚好等于100
-  - image:
-      repository: nginx
-      # Overrides the image tag whose default is the chart appVersion.
-      version: 1.19.0
-      name: new
-      weight: 100
+  - image: nginx
+    version: 1.16.0
+    name: old # 用来区分新旧版本的名字
+    weight: 0 # 流量分布。 全部版本加起来需要刚好等于100
+  - image: nginx
+    version: 1.19.0
+    name: new
+    weight: 100
+    env:
+      - name: DEMO_GREETING
+        value: "Hello from the environment"
+      - name: DEMO_FAREWELL
+        value: "Such a sweet sorrow"
+
 
 imagePullPolicy: IfNotPresent
 imagePullSecrets: []
@@ -28,7 +30,7 @@ service:
   port: 80
 
 gateway:
-  enable: false
+  enable: true
   hosts:
     - "app-demo.spacecycle.cn"
   servers:
