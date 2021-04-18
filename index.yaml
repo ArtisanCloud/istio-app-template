@@ -1,0 +1,24 @@
+apiVersion: v1
+entries:
+  istio-app:
+  - apiVersion: v2
+    appVersion: 1.19.0
+    created: "2021-04-18T09:52:35.617797582+08:00"
+    description: A Helm chart for Kubernetes
+    digest: a59b3e0f25aa332d25f73b0224c3097b95fe3069162ef827a999b8f2535e2c19
+    name: istio-app
+    type: application
+    urls:
+    - istio-app-1.0.0.tgz
+    version: 1.0.0
+  - apiVersion: v2
+    appVersion: 1.19.0
+    created: "2021-04-18T09:52:35.616636891+08:00"
+    description: A Helm chart for Kubernetes
+    digest: ba8eb29248d56a8c8af256cfdbfb24880afedc4ae868a99b74dccaf1b2eb433b
+    name: istio-app
+    type: application
+    urls:
+    - istio-app-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-04-18T09:52:35.615849523+08:00"
