@@ -28,7 +28,7 @@ service:
   port: 80
 
 gateway:
-  enable: true
+  enable: false
   hosts:
     - "app-demo.spacecycle.cn"
   servers:
