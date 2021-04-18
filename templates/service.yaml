@@ -9,9 +9,9 @@ spec:
   host: {{ $fullName }}
   subsets:
   {{- range $i, $item := .Values.app }}
-  - name: {{ .image.name }}
+  - name: {{ .name }}
     labels:
-      version: {{ .image.version }}
+      version: {{ .version }}
   {{- end }}
 
 ---
@@ -54,7 +54,7 @@ spec:
         port:
           number: {{ $root.Values.service.port }} # 这个端口和Service里面的端口一致就行。
         host: {{ $fullName }} # 指向的应用
-        subset: {{ .image.name }}
-      weight: {{ .image.weight }}
+        subset: {{ .name }}
+      weight: {{ .weight }}
     {{- end }}
    
