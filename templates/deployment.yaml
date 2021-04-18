@@ -5,9 +5,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "istio-app.fullname" . }}-{{ $item.image.version }}
+  name: {{ include "istio-app.fullname" . }}-{{ $item.version }}
   labels:
-    version: {{ $item.image.version }}
+    version: {{ $item.version }}
     {{- include "istio-app.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
@@ -15,7 +15,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      version: {{ $item.image.version }}
+      version: {{ $item.version }}
       {{- include "istio-app.selectorLabels" . | nindent 6 }}
   template:
     metadata:
@@ -24,7 +24,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        version: {{ $item.image.version }}
+        version: {{ $item.version }}
         {{- include "istio-app.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
@@ -38,8 +38,12 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ $item.image.repository }}:{{ $item.image.version | default .Chart.AppVersion }}"
+          image: "{{ $item.image }}:{{ $item.version | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.imagePullPolicy }}
+          {{- if $item.env }}
+          env:
+            {{- toYaml $item.env | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 80
