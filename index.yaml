@@ -3,7 +3,7 @@ entries:
   istio-app:
   - apiVersion: v2
     appVersion: 1.19.0
-    created: "2021-04-21T23:34:51.530722599+08:00"
+    created: "2021-04-22T13:58:43.107887593+08:00"
     description: A Helm chart for Kubernetes
     digest: 5e1f074882367bd9f2249adec331c63652af168c0abbcd0c98629017fef139ce
     name: istio-app
@@ -13,7 +13,7 @@ entries:
     version: 1.1.0
   - apiVersion: v2
     appVersion: 1.19.0
-    created: "2021-04-21T23:34:51.52980272+08:00"
+    created: "2021-04-22T13:58:43.106919961+08:00"
     description: A Helm chart for Kubernetes
     digest: a59b3e0f25aa332d25f73b0224c3097b95fe3069162ef827a999b8f2535e2c19
     name: istio-app
@@ -23,7 +23,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: 1.19.0
-    created: "2021-04-21T23:34:51.529016109+08:00"
+    created: "2021-04-22T13:58:43.106237372+08:00"
     description: A Helm chart for Kubernetes
     digest: ba8eb29248d56a8c8af256cfdbfb24880afedc4ae868a99b74dccaf1b2eb433b
     name: istio-app
@@ -34,7 +34,17 @@ entries:
   istio-laravel-app:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-04-21T23:34:51.53204947+08:00"
+    created: "2021-04-22T13:58:43.109914177+08:00"
+    description: A Helm chart for Kubernetes
+    digest: f027eddb36f3620647682fd3d11ae7efe0d5a318c844bb7539e0ef1bfe338a99
+    name: istio-laravel-app
+    type: application
+    urls:
+    - istio-laravel-app-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-04-22T13:58:43.10916971+08:00"
     description: A Helm chart for Kubernetes
     digest: 70a59f3fa337780be73a8b75f6abd018f629e99e3f2b8b377154324e9034b4ef
     name: istio-laravel-app
@@ -44,7 +54,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-04-21T23:34:51.531367668+08:00"
+    created: "2021-04-22T13:58:43.108506813+08:00"
     description: A Helm chart for Kubernetes
     digest: 24282ed17df041ff61176ec65c3e88009a2d4e9faea569c33dcd99460c8b3a66
     name: istio-laravel-app
@@ -52,4 +62,4 @@ entries:
     urls:
     - istio-laravel-app-1.0.0.tgz
     version: 1.0.0
-generated: "2021-04-21T23:34:51.528282352+08:00"
+generated: "2021-04-22T13:58:43.105453783+08:00"
