@@ -3,7 +3,7 @@ entries:
   istio-app:
   - apiVersion: v2
     appVersion: 1.19.0
-    created: "2021-04-25T13:21:13.571641305+08:00"
+    created: "2021-04-25T14:50:24.238744103+08:00"
     description: A Helm chart for Kubernetes
     digest: 5e1f074882367bd9f2249adec331c63652af168c0abbcd0c98629017fef139ce
     name: istio-app
@@ -13,7 +13,7 @@ entries:
     version: 1.1.0
   - apiVersion: v2
     appVersion: 1.19.0
-    created: "2021-04-25T13:21:13.570618248+08:00"
+    created: "2021-04-25T14:50:24.237700984+08:00"
     description: A Helm chart for Kubernetes
     digest: a59b3e0f25aa332d25f73b0224c3097b95fe3069162ef827a999b8f2535e2c19
     name: istio-app
@@ -23,7 +23,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: 1.19.0
-    created: "2021-04-25T13:21:13.569833975+08:00"
+    created: "2021-04-25T14:50:24.236972853+08:00"
     description: A Helm chart for Kubernetes
     digest: ba8eb29248d56a8c8af256cfdbfb24880afedc4ae868a99b74dccaf1b2eb433b
     name: istio-app
@@ -34,7 +34,17 @@ entries:
   istio-go-app:
   - apiVersion: v2
     appVersion: 1.19.0
-    created: "2021-04-25T13:21:13.572787873+08:00"
+    created: "2021-04-25T14:50:24.241717913+08:00"
+    description: A Helm chart for Kubernetes
+    digest: 814f6f4e6e8bc269ed93b966b2dd79a92d2b95e04e8e2e462243183970c2724a
+    name: istio-go-app
+    type: application
+    urls:
+    - istio-go-app-1.1.2.tgz
+    version: 1.1.2
+  - apiVersion: v2
+    appVersion: 1.19.0
+    created: "2021-04-25T14:50:24.239992941+08:00"
     description: A Helm chart for Kubernetes
     digest: 5be6da98734c121d02883ab14c206634afe552d1e6429fde38eef1f805eb67f3
     name: istio-go-app
@@ -45,7 +55,7 @@ entries:
   istio-laravel-app:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-04-25T13:21:13.578722862+08:00"
+    created: "2021-04-25T14:50:24.246689375+08:00"
     description: A Helm chart for Kubernetes
     digest: 1910c3bc75ddb385ae1df7ccc83f8defd7d2c087778c3c2a28238875dc54902b
     name: istio-laravel-app
@@ -55,7 +65,7 @@ entries:
     version: 1.0.4
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-04-25T13:21:13.578037903+08:00"
+    created: "2021-04-25T14:50:24.246002371+08:00"
     description: A Helm chart for Kubernetes
     digest: 5e9b604b1bb30393fa63ee41a0af26443584f579e8a808ca53d0e1b9fd59b473
     name: istio-laravel-app
@@ -65,7 +75,7 @@ entries:
     version: 1.0.3
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-04-25T13:21:13.577344043+08:00"
+    created: "2021-04-25T14:50:24.245298429+08:00"
     description: A Helm chart for Kubernetes
     digest: f027eddb36f3620647682fd3d11ae7efe0d5a318c844bb7539e0ef1bfe338a99
     name: istio-laravel-app
@@ -75,7 +85,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-04-25T13:21:13.575785355+08:00"
+    created: "2021-04-25T14:50:24.244548487+08:00"
     description: A Helm chart for Kubernetes
     digest: 70a59f3fa337780be73a8b75f6abd018f629e99e3f2b8b377154324e9034b4ef
     name: istio-laravel-app
@@ -85,7 +95,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-04-25T13:21:13.574307163+08:00"
+    created: "2021-04-25T14:50:24.243883905+08:00"
     description: A Helm chart for Kubernetes
     digest: 24282ed17df041ff61176ec65c3e88009a2d4e9faea569c33dcd99460c8b3a66
     name: istio-laravel-app
@@ -93,4 +103,4 @@ entries:
     urls:
     - istio-laravel-app-1.0.0.tgz
     version: 1.0.0
-generated: "2021-04-25T13:21:13.569041354+08:00"
+generated: "2021-04-25T14:50:24.235953465+08:00"
