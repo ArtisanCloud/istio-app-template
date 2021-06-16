@@ -9,6 +9,11 @@ app:
     version: 1.16.0
     name: old # 用来区分新旧版本的名字
     weight: 0 # 流量分布。 全部版本加起来需要刚好等于100
+    mount: 
+      - name: nginx-config
+        target: /app/config
+        # subPath: true # true表示只挂载目标文件。 例如： 只是把a.txt挂载到/app/config/a.txt,原有文件不动
+        #               # false表示会覆盖整个文件夹。例如： a.txt 挂载到/app/config之后，原有的文件夹内容不存在了，只包含a.txt
   - image: nginx
     version: 1.19.0
     name: new
@@ -19,6 +24,13 @@ app:
       - name: DEMO_FAREWELL
         value: "Such a sweet sorrow"
 
+configMaps:
+  - name: nginx-config
+    data:
+      rsa-public-key.pem: | 
+        rsa-public-key test content
+      rsa-public-key.key: |
+        rsa-public-key test keykey
 
 imagePullPolicy: IfNotPresent
 imagePullSecrets: []
@@ -31,6 +43,7 @@ service:
 
 gateway:
   enable: true
+  istioSelector: ingressgateway
   hosts:
     - "app-demo.spacecycle.cn"
   servers:

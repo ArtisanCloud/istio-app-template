@@ -1,4 +1,5 @@
 {{- $root := . -}}
+{{- $fullName := include "istio-app.fullname" . -}}
 {{- range $i, $item := .Values.app }}
 {{- with $root }}
 ---
@@ -58,6 +59,23 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if $item.mount }}
+          volumeMounts:
+            {{- range $i, $v := $item.mount }}
+            - name: {{ $v.name }} # 使用的volumes.name
+              mountPath: {{ $v.target }} # 映射到容器里面的目录
+            {{- end }}
+          {{- end }}
+
+      {{- if .Values.configMaps }}
+      {{- range $i, $item := .Values.configMaps }}
+      volumes:
+        - name: {{ $item.name }} # 
+          configMap:
+            name: {{ $fullName }}-{{ $item.name }}
+      {{- end }}
+      {{- end }}
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

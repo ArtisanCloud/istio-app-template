@@ -1,0 +1,15 @@
+{{- $fullName := include "istio-app.fullname" . -}}
+{{- if .Values.configMaps }}
+{{- range $i, $item := .Values.configMaps }}
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}-{{ .name }}
+data:
+  {{ toYaml .data | nindent 2 }}
+
+
+{{- end }}
+{{- end }}

@@ -8,7 +8,7 @@ metadata:
   name: {{$fullName}}-gateway # 网关的名字，需要在services里面对应
 spec:
   selector:
-    istio: ingressgateway # use Istio default gateway implementation
+    istio: {{ $root.Values.gateway.istioSelector }} # use Istio default gateway implementation
   servers:
     {{- range $i, $val := .Values.gateway.servers }}
     - port:
