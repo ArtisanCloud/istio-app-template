@@ -16,9 +16,9 @@ spec:
       version: {{ .version }}
   {{- end }}
 
+---
 {{- end -}}
 
----
 apiVersion: v1
 kind: Service
 metadata:
