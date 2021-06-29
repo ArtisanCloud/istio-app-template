@@ -47,9 +47,10 @@ metadata:
   name: {{ $fullName }}
 spec:
   hosts: 
-    {{ toYaml .Values.visualService.hosts }}
+    {{ toYaml .Values.visualService.hosts | nindent 4 }}
   gateways:
-  - {{ .Values.visualService.gateway }}
+    {{ toYaml .Values.visualService.gateway }}
+  http:
   - match:
     - uri:
         prefix: /
