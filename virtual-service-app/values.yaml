@@ -47,17 +47,12 @@ service:
   type: ClusterIP
   port: 80
 
-gateway:
+visualService:
   enable: true
-  istioSelector: ingressgateway
+  gateway: space-cn-gateway
   hosts:
-    - "app-demo.spacecycle.cn"
-  servers:
-    - type: http
-      port: 80
-    - type: https
-      port: 443
-      certs: spacecycle.cn.credential
+    - "*.space.com"
+  
 
 serviceAccount:
   # Specifies whether a service account should be created

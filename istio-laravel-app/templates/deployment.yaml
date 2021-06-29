@@ -1,15 +1,14 @@
 {{- $root := . -}}
-{{- $fullName := include "istio-app.fullname" . -}}
 {{- range $i, $item := .Values.app }}
 {{- with $root }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "istio-app.fullname" . }}-{{ $item.version }}
+  name: {{ .Release.Name }}-{{ $item.version }}
   labels:
     version: {{ $item.version }}
-    {{- include "istio-app.labels" . | nindent 4 }}
+    {{- include "istio-laravel-app.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -17,7 +16,7 @@ spec:
   selector:
     matchLabels:
       version: {{ $item.version }}
-      {{- include "istio-app.selectorLabels" . | nindent 6 }}
+      {{- include "istio-laravel-app.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -26,17 +25,16 @@ spec:
       {{- end }}
       labels:
         version: {{ $item.version }}
-        {{- include "istio-app.selectorLabels" . | nindent 8 }}
+        {{- include "istio-laravel-app.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets: 
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "istio-app.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Release.Name }}-php-fpm
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ $item.image }}:{{ $item.version | default .Chart.AppVersion }}"
@@ -45,6 +43,43 @@ spec:
           env:
             {{- toYaml $item.env | nindent 12 }}
           {{- end }}
+          ports:
+            - containerPort: 9000
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: nginx-www
+            - mountPath: /data
+              name: {{ .Release.Name }}-env
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "cp -r /app/. /var/www/html && cp /data/env /var/www/html/.env && chmod -R 777 /var/www/html/storage && chmod -R 777 /var/www/html/bootstrap/cache"]
+          resources:
+            limits:
+              cpu: "1"
+              memory: "200Mi"
+            requests:
+              cpu: "0.1"
+
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: nginx-www
+            - mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              name: {{ .Release.Name }}-laravel-nginx-config
+          resources:
+            limits:
+              cpu: "0.1"
+              memory: "200Mi"
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+
           {{- if .Values.healthCheck.enable }}
           livenessProbe:
             httpGet:
@@ -60,26 +95,22 @@ spec:
             initialDelaySeconds: {{ .Values.healthCheck.initialDelaySeconds }}
             timeoutSeconds: {{ .Values.healthCheck.timeoutSeconds }}
             periodSeconds: {{ .Values.healthCheck.periodSeconds }}
-          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- if $item.mount }}
-          volumeMounts:
-            {{- range $i, $v := $item.mount }}
-            - name: {{ $v.name }} # 使用的volumes.name
-              mountPath: {{ $v.target }} # 映射到容器里面的目录
-            {{- end }}
           {{- end }}
 
-      {{- if .Values.configMaps }}
-      {{- range $i, $item := .Values.configMaps }}
       volumes:
-        - name: {{ $item.name }} # 
+        - name: nginx-www
+          emptyDir: {}
+        - name: {{ .Release.Name }}-env
+          configMap: 
+            name: {{ .Release.Name }}-env
+            items:
+              - key: env
+                path: env
+        - name: {{ .Release.Name }}-laravel-nginx-config
           configMap:
-            name: {{ $fullName }}-{{ $item.name }}
-      {{- end }}
-      {{- end }}
-
+            name: {{ .Release.Name }}-laravel-nginx-config
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -94,4 +125,3 @@ spec:
       {{- end }}
 {{- end }}
 {{- end }}
-

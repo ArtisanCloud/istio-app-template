@@ -1,0 +1,60 @@
+{{- $root := . -}}
+{{- $fullName := include "istio-laravel-app.fullname" . -}}
+# 路由规则
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  host: {{ .Release.Name }}
+  subsets:
+  {{- range $i, $item := .Values.app }}
+  - name: {{ .name }}
+    labels:
+      version: {{ .version }}
+  {{- end }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    {{- include "istio-laravel-app.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "istio-laravel-app.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  hosts: {{ .Values.gateway.hosts }}
+  gateways:
+  - {{ .Release.Name }}-gateway # 这里的名字和app-gw.yaml里面的一致
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    {{- range $i, $item := .Values.app }}
+    - destination:
+        port:
+          number: {{ $root.Values.service.port }} # 这个端口和Service里面的端口一致就行。
+        host: {{ $root.Release.Name }} # 指向的应用
+        subset: {{ .name }}
+      weight: {{ .weight }}
+    {{- end }}
+   

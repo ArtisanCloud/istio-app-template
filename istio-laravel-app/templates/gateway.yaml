@@ -1,0 +1,26 @@
+{{- if .Values.gateway.enable -}}
+{{- $root := . -}}
+{{- $svcPort := .Values.service.port -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ .Release.Name }}-gateway # 网关的名字，需要在services里面对应
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+    {{- range $i, $val := .Values.gateway.servers }}
+    - port:
+        number: {{ .port }} # 外部入端口。
+        name: {{ .type }}
+        protocol: {{ .type | upper }}
+      
+      {{- if eq .type "https" }}
+      tls:
+        mode: SIMPLE
+        credentialName: {{ .certs }}
+      {{- end}}
+      hosts: {{ $root.Values.gateway.hosts }}
+    {{- end }}
+
+{{- end }}

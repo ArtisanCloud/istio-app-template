@@ -1,36 +1,24 @@
-# Default values for istio-app.
+# Default values for istio-laravel-app.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 app:
-  - image: nginx
-    version: 1.16.0
+  - image: harbor-test.spacecycle.cn/hengshan/hengshan-service
+    version: 2.0.0
     name: old # 用来区分新旧版本的名字
-    weight: 0 # 流量分布。 全部版本加起来需要刚好等于100
-    mount: 
-      - name: nginx-config
-        target: /app/config
-        # subPath: true # true表示只挂载目标文件。 例如： 只是把a.txt挂载到/app/config/a.txt,原有文件不动
-        #               # false表示会覆盖整个文件夹。例如： a.txt 挂载到/app/config之后，原有的文件夹内容不存在了，只包含a.txt
-  - image: nginx
-    version: 1.19.0
-    name: new
-    weight: 100
-    env:
-      - name: DEMO_GREETING
-        value: "Hello from the environment"
-      - name: DEMO_FAREWELL
-        value: "Such a sweet sorrow"
+    weight: 100 # 流量分布。 全部版本加起来需要刚好等于100
 
-configMaps:
-  - name: nginx-config
-    data:
-      rsa-public-key.pem: | 
-        rsa-public-key test content
-      rsa-public-key.key: |
-        rsa-public-key test keykey
+  # - image: nginx
+  #   version: 1.19.0
+  #   name: new
+  #   weight: 100
+  #   env:
+  #     - name: DEMO_GREETING
+  #       value: "Hello from the environment"
+  #     - name: DEMO_FAREWELL
+  #       value: "Such a sweet sorrow"
 
 healthCheck:
   enable: true
@@ -38,18 +26,13 @@ healthCheck:
   timeoutSeconds: 1 # 探测超时时间。默认1秒，最小1秒。 
   periodSeconds: 10 # 执行探测的频率。默认是10秒，最小1秒。
 
-imagePullPolicy: IfNotPresent
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
 
-service:
-  type: ClusterIP
-  port: 80
+imagePullPolicy: IfNotPresent
+imagePullSecrets: 
+  - name: harbor-test
 
 gateway:
   enable: true
-  istioSelector: ingressgateway
   hosts:
     - "app-demo.spacecycle.cn"
   servers:
@@ -58,6 +41,37 @@ gateway:
     - type: https
       port: 443
       certs: spacecycle.cn.credential
+
+configMaps:
+  nginxConf: |
+    events {
+    }
+    http {
+      server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        root /var/www/html/public;
+        index index.php;
+        server_name _;
+        location / {
+          try_files $uri $uri/ /index.php?$query_string;
+        }
+        location ~ \.php$ {
+          include fastcgi_params;
+          fastcgi_param REQUEST_METHOD $request_method;
+          fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+          fastcgi_pass 127.0.0.1:9000;
+        }
+      }
+    }
+  env: |
+    APP_NAME=hengshan-services-dev
+    APP_ENV=dev
+  
+
+
+nameOverride: ""
+fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -80,13 +94,14 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
-    # http:
-    #   enable: true
-    #   port: 80
-    # https:
-    #   enable: true
-    #   port: 443
-    #   certs: spacecycle.cn.credential
+
+service:
+  type: ClusterIP
+  port: 80
+
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
