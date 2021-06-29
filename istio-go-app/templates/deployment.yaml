@@ -45,22 +45,18 @@ spec:
           env:
             {{- toYaml $item.env | nindent 12 }}
           {{- end }}
-          {{- if .Values.healthCheck.enable }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
           livenessProbe:
             httpGet:
               path: /
               port: http
-            initialDelaySeconds: {{ .Values.healthCheck.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.healthCheck.timeoutSeconds }}
-            periodSeconds: {{ .Values.healthCheck.periodSeconds }}
           readinessProbe:
             httpGet:
               path: /
               port: http
-            initialDelaySeconds: {{ .Values.healthCheck.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.healthCheck.timeoutSeconds }}
-            periodSeconds: {{ .Values.healthCheck.periodSeconds }}
-          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if $item.mount }}

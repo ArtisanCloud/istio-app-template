@@ -32,12 +32,6 @@ configMaps:
       rsa-public-key.key: |
         rsa-public-key test keykey
 
-healthCheck:
-  enable: true
-  initialDelaySeconds: 0 # 容器启动后第一次执行探测是需要等待多少秒。
-  timeoutSeconds: 1 # 探测超时时间。默认1秒，最小1秒。 
-  periodSeconds: 10 # 执行探测的频率。默认是10秒，最小1秒。
-
 imagePullPolicy: IfNotPresent
 imagePullSecrets: []
 nameOverride: ""
@@ -47,13 +41,24 @@ service:
   type: ClusterIP
   port: 80
 
-visualService:
-  enable: true
-  gateway:
-    - space-cn-gateway
+gateway:
+  enable: false
+  istioSelector: ingressgateway
   hosts:
-    - "*.space.com"
-  
+    - "app-demo.spacecycle.cn"
+  servers:
+    - type: http
+      port: 80
+    - type: https
+      port: 443
+      certs: spacecycle.cn.credential
+
+virtualService:
+  enable: false
+  gateways:
+    - spacecycle-cn-gateway
+  hosts:
+    - "wecom-sso-dev.spacecycle.cn"
 
 serviceAccount:
   # Specifies whether a service account should be created

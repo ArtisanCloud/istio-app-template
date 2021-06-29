@@ -1,7 +1,7 @@
 {{- $root := . -}}
 {{- $fullName := include "istio-app.fullname" . -}}
 
-{{- if .Values.visualService.enable -}}
+{{- if .Values.virtualService.enable -}}
 # 路由规则
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
@@ -15,6 +15,7 @@ spec:
     labels:
       version: {{ .version }}
   {{- end }}
+
 ---
 {{- end -}}
 
@@ -39,17 +40,16 @@ kind: ServiceAccount
 metadata:
   name: {{ $fullName }}
 
-{{- if .Values.visualService.enable -}}
+
+{{- if .Values.virtualService.enable -}}
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: {{ $fullName }}
 spec:
-  hosts: 
-    {{ toYaml .Values.visualService.hosts | nindent 4 }}
-  gateways:
-    {{ toYaml .Values.visualService.gateway }}
+  hosts: {{ .Values.virtualService.hosts }}
+  gateways: {{ .Values.virtualService.gateways }}
   http:
   - match:
     - uri:
